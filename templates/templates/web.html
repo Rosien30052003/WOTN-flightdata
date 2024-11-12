@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLIGHT TRAJECTORY DATA</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        
+        /* CSS cho phần header */
+        .header {
+            background-color: #002855; /* Màu nền xanh đậm */
+            color: #f0e68c; /* Màu chữ vàng nhạt */
+            padding: 30px 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header img {
+            height: 100px; /* Kích thước logo */
+            margin-right: 20px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .header span {
+            display: block;
+            font-size: 20px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 20px; text-align: left; border: 1px solid #ddd; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <!-- Header với logo và tên tổ chức -->
+    <header class="header">
+        <a href="/">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        </a>
+        <div>
+            <h1>HỌC VIỆN HÀNG KHÔNG VIỆT NAM</h1>
+            <span>VIETNAM AVIATION ACADEMY</span>
+        </div>
+    </header>
+
+    <!-- Nội dung chính -->
+    <h1>Tra cứu dữ liệu chuyến bay trong WOTN</h1>
+    <form action="/" method="get">
+        <label for="flight_number">Số hiệu chuyến bay:</label>
+        <input type="text" id="flight_number" name="flight_number" required>
+        <button type="submit">Tìm kiếm</button>
+    </form>
+
+    {% if search_result is not none %}
+        <h2>Kết quả cho chuyến bay:</h2>
+        {% if search_result|length == 0 %}
+            <p>Không tìm thấy dữ liệu cho số hiệu chuyến bay.</p>
+        {% else %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Entry Time</th>
+                        <th>Adjust Time</th>
+                        <th>Type</th>
+                        <th>Velocity</th>
+                        <th>Adjust FL</th>
+                        <th>FL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in search_result %}
+                    <tr>
+                        <td>{{ row['Flight Number'] }}</td>
+                        <td>{{ row['Entry Time'] }}</td>
+                        <td>{{ row['Adjust Time'] }}</td>
+                        <td>{{ row['Type'] }}</td>
+                        <td>{{ row['Velocity'] }}</td>
+                        <td>{{ row['Adjust FL'] }}</td>
+                        <td>{{ row['FL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Nút Hiển thị thêm -->
+            <form action="/" method="get">
+                <input type="hidden" name="flight_number" value="{{ flight_number }}">
+                <button type="submit" name="show_more" value="true">xem đường bay</button>
+            </form>
+
+            {% if additional_info %}
+                <!-- Bảng hiển thị thông tin bổ sung về đường bay -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N1</th>
+                            <th>N2</th>
+                            <th>N3</th>
+                            <th>N4</th>
+                            <th>N5</th>
+                            <th>N6</th>
+                            <th>N7</th>
+                            <th>N8</th>
+                            <th>N9</th>
+                            <th>N10</th>
+                            <th>N11</th>
+                            <th>N12</th>
+                            <th>N13</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for info in additional_info %}
+                        <tr>
+                            <td>{{ info['N1'] }}</td>
+                            <td>{{ info['N2'] }}</td>
+                            <td>{{ info['N3'] }}</td>
+                            <td>{{ info['N4'] }}</td>
+                            <td>{{ info['N5'] }}</td>
+                            <td>{{ info['N6'] }}</td>
+                            <td>{{ info['N7'] }}</td>
+                            <td>{{ info['N8'] }}</td>
+                            <td>{{ info['N9'] }}</td>
+                            <td>{{ info['N10'] }}</td>
+                            <td>{{ info['N11'] }}</td>
+                            <td>{{ info['N12'] }}</td>
+                            <td>{{ info['N13'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</body>
+</html>
