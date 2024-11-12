@@ -34,7 +34,7 @@ def index():
             additional_info = filtered_data[route_columns].to_dict(orient="records")
 
     # Render HTML template với kết quả tìm kiếm
-    return render_template('web.html', search_result=search_result, additional_info=additional_info, flight_number=flight_number)
+    return render_template('index.html', search_result=search_result, additional_info=additional_info, flight_number=flight_number)
 
 if __name__ == '__main__':
     app.run(debug=True)
